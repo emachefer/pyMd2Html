@@ -50,9 +50,8 @@ def getHtml(mdString):
     return inString
 
 # Define a HTML wrapper
-def htmlWrap(inString, title=""):
-    css = "h1, h2, h3, h4{text-align:center;}"# TODO : custom css file
-    head = "<html><head><title>"+title+"</title><style>"+css+"</style></head><body>"
+def htmlWrap(inString, css, title=""):
+    head = "<html><head><title>"+title+"</title>"+css+"</head><body>"
     lastString = "</body></html>"
     return str(head + str(inString) +lastString)
 
@@ -76,7 +75,13 @@ if __name__=="__main__":
         if sys.argv[1] == "--help" or sys.argv[1] == "-h":
             print(help())
         else:
+            try:
+                stylesheet = sys.argv[3]
+            except:
+                css  = "<style>h1, h2, h3, h4{text-align:center; color:blue;}</style>"# TODO : custom css file
+            else:
+                css = '<link rel="stylesheet" href="'+stylesheet+'" />'
             mdString = getMd(inFile)
             inString = getHtml(mdString)
             with open(outFile, 'w') as ofile:
-                ofile.write(htmlWrap(inString, "A savoir"))
+                ofile.write(htmlWrap(inString, css, "A savoir"))
